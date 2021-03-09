@@ -27,8 +27,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: ./
-          file: simulation/Dockerfile.simulation
+          context: ./simulation
+          file: ./simulation/Dockerfile.simulation
           tags: metukovan/cirak:simulation
       -
         name: Image digest
