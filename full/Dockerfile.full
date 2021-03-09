@@ -1,0 +1,71 @@
+FROM osrf/ros:melodic-desktop-full
+
+ARG WORKSPACE=/root/cirak_ws
+ARG REPOS=cirak_full.repos  
+
+# cirak_simulation.repos
+
+# nvidia-container-runtime
+ENV NVIDIA_VISIBLE_DEVICES \
+    ${NVIDIA_VISIBLE_DEVICES:-all}
+ENV NVIDIA_DRIVER_CAPABILITIES \
+    ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}all
+
+WORKDIR ${WORKSPACE}
+ENV ROS_WS ${WORKSPACE}
+    
+# install build tools
+RUN \
+    apt-get update && \
+    apt-get install -q -y --no-install-recommends python3-vcstool python-catkin-tools 
+
+#install cuda
+RUN apt-get install -y wget && \
+    wget https://developer.download.nvidia.com/compute/cuda/11.0.3/local_installers/cuda_11.0.3_450.51.06_linux.run -q 
+RUN sh /cuda_11.0.3_450.51.06_linux.run --silent --samples --toolkit
+
+# install libfreenect
+RUN cd .. && git clone https://github.com/OpenKinect/libfreenect2.git && \
+    cd libfreenect2 && sudo apt-get install -y build-essential cmake pkg-config && \
+    sudo apt-get install -y libusb-1.0-0-dev && sudo apt-get install -y libturbojpeg0-dev && \
+    sudo apt-get install -y libopenni2-dev && sudo apt-get install -y beignet-dev && \
+    sudo apt-get install -y libglfw3-dev && mkdir build && cd build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/freenect2 && \
+    make && make install 
+
+COPY ${REPOS}  src/${REPOS}
+
+# install packages
+RUN cd ${ROS_WS}/src && vcs import < ${WORKSPACE}/src/${REPOS}
+
+RUN apt install -q -y --no-install-recommends python-pip && \
+    pip install --upgrade pip
+
+RUN cd ${ROS_WS} && rosdep update && apt-get update && \
+    DEBIAN_FRONTEND=noninteractive \
+    rosdep install -y -r --from-paths src --ignore-src \
+    --skip-keys "python-matplotlib python-tensorflow-gpu-pip \
+    python-scipy python-tqdm python-dlib python-numpy python-pytorch-pip python-opencv"
+
+# build ros package source
+RUN catkin config \
+    --extend /opt/ros/${ROS_DISTRO} && \
+    catkin build
+
+ENV PATH="/root/miniconda3/bin:${PATH}"
+ARG PATH="/root/miniconda3/bin:${PATH}"
+RUN apt-get update
+
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh 
+
+RUN conda --version
+
+COPY conda_env.yaml / 
+RUN conda env create -f /conda_env.yaml
+SHELL ["conda", "run", "-n", "rt-gene", "/bin/bash", "-c"]
+RUN conda list && pip install requests tqdm && \
+    export PYTHONPATH="${PYTHONPATH}:/root/cirak_ws/src/rt_gene/rt_gene/src" && ./src/rt_gene/rt_gene/scripts/download_models.py

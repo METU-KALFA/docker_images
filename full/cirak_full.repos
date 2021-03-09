@@ -1,0 +1,45 @@
+repositories:
+  apriltag:
+    type: git
+    url: https://github.com/METU-KALFA/apriltag.git
+    version: master
+  apriltag_ros:
+    type: git
+    url: https://github.com/METU-KALFA/apriltag_ros.git
+    version: master
+  gazebo-pkgs:
+    type: git
+    url: https://github.com/METU-KALFA/gazebo-pkgs.git
+    version: master
+  general-message-pkgs:
+    type: git
+    url: https://github.com/METU-KALFA/general-message-pkgs.git
+    version: master
+  iai_kinect2:
+    type: git
+    url: https://github.com/METU-KALFA/iai_kinect2.git
+    version: master
+  roboticsgroup_upatras_gazebo_plugins:
+    type: git
+    url: https://github.com/METU-KALFA/roboticsgroup_upatras_gazebo_plugins.git
+    version: master
+  robotiq:
+    type: git
+    url: https://github.com/METU-KALFA/robotiq.git
+    version: kinetic-devel
+  rt_gene:
+    type: git
+    url: https://github.com/METU-KALFA/rt_gene.git
+    version: master
+  universal_robot:
+    type: git
+    url: https://github.com/METU-KALFA/universal_robot.git
+    version: kinetic-devel
+  ur5_robotiq140_kinect:
+    type: git
+    url: https://github.com/METU-KALFA/ur5_robotiq140_kinect.git
+    version: real-robot
+  ur_modern_driver:
+    type: git
+    url: https://github.com/METU-KALFA/ur_modern_driver.git
+    version: kinetic-devel

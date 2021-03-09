@@ -1,0 +1,25 @@
+repositories:
+  gazebo-pkgs:
+    type: git
+    url: https://github.com/METU-KALFA/gazebo-pkgs.git
+    version: master
+  general-message-pkgs:
+    type: git
+    url: https://github.com/METU-KALFA/general-message-pkgs.git
+    version: master
+  roboticsgroup_upatras_gazebo_plugins:
+    type: git
+    url: https://github.com/METU-KALFA/roboticsgroup_upatras_gazebo_plugins.git
+    version: master
+  robotiq:
+    type: git
+    url: https://github.com/METU-KALFA/robotiq.git
+    version: kinetic-devel
+  universal_robot:
+    type: git
+    url: https://github.com/METU-KALFA/universal_robot.git
+    version: kinetic-devel
+  ur5_robotiq140_kinect:
+    type: git
+    url: https://github.com/METU-KALFA/ur5_robotiq140_kinect.git
+    version: real-robot

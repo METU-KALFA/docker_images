@@ -1,0 +1,37 @@
+FROM osrf/ros:melodic-desktop-full
+
+ARG WORKSPACE=/root/cirak_ws
+ARG REPOS=cirak_simulation.repos 
+
+# cirak_full.repos  
+
+# nvidia-container-runtime
+ENV NVIDIA_VISIBLE_DEVICES \
+    ${NVIDIA_VISIBLE_DEVICES:-all}
+ENV NVIDIA_DRIVER_CAPABILITIES \
+    ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}all
+
+WORKDIR ${WORKSPACE}
+ENV ROS_WS ${WORKSPACE}
+    
+# install build tools
+RUN \
+    apt-get update && \
+    apt-get install -q -y --no-install-recommends python3-vcstool python-catkin-tools 
+
+COPY ${REPOS}  src/${REPOS}
+
+# install packages
+RUN cd ${ROS_WS}/src && vcs import < ${WORKSPACE}/src/${REPOS}
+
+RUN apt install -q -y --no-install-recommends python-pip && \
+    pip install --upgrade pip
+
+RUN cd .. & rosdep update && \
+    DEBIAN_FRONTEND=noninteractive \
+    rosdep install -y --from-paths src --ignore-src
+    
+# build ros package source
+RUN catkin config \
+    --extend /opt/ros/${ROS_DISTRO} && \
+    catkin build

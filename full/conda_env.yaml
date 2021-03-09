@@ -1,0 +1,24 @@
+name: rt-gene
+channels:
+        - conda-forge
+        - defaults
+        - pytorch
+dependencies:
+        - python=2.7
+        - dlib
+        - numpy
+        - scipy
+        - tqdm
+        - pillow
+        - rospkg
+        - opencv
+        - empy
+        - tensorflow-gpu
+        - pytorch
+        - torchvision
+        - pip:
+            - requests
+            - future
+
+
+   
