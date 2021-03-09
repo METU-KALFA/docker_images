@@ -28,7 +28,7 @@ jobs:
         with:
           push: true
           context: ./simulation
-          file: ./simulation/Dockerfile.simulation
+          file: Dockerfile.simulation
           tags: metukovan/cirak:simulation
       -
         name: Image digest
