@@ -4,21 +4,10 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:   
-    inputs:
-        caller:
-          description: 'Caller repo'
-          required: false
-          default: 'Foo'
+  workflow_dispatch:
 
 
-jobs:
-  say_hello:
-    runs-on: ubuntu-latest
-    steps:
-    - run: |
-        echo "Hello ${{ github.event.inputs.caller }}!"
-        
+jobs:        
   docker:
     runs-on: ubuntu-latest
     steps:
