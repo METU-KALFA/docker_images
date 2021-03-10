@@ -5,9 +5,17 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+    inputs:
+      caller:
+        description: 'caller'  
+        required: true
 
 jobs:        
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{github.event.inputs.caller}}"
+    
   docker:
     runs-on: ubuntu-latest
     steps:
