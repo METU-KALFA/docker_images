@@ -5,11 +5,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      caller:
-        description: 'caller'  
-        required: true
-
+  
 jobs:        
   echo:
     runs-on: ubuntu-latest
